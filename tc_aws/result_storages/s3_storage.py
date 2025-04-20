@@ -60,9 +60,9 @@ class Storage(AwsStorage, BaseStorage):
             return None
 
         result = ResultStorageResult()
-        async with key['Body'] as stream:
-            result.buffer = await stream.read()
-        result.successful = True
+        with key['Body'] as stream:
+            result.buffer = stream.read()
+            del stream
 
         result.metadata = {
             "LastModified": key.get('LastModified'),
